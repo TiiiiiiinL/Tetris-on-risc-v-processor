@@ -27,6 +27,8 @@ int tetrisShapes[7] = {1,2,3,4,5,6,7}; //se nedan för nummer motsvarar
 
 
 void fisherYates(int tetrisShapes[]) {
+    //bestämmer vilken ordning block landa
+    //landa alla en gång och sen igen när vi är klar
     for (int i = 6; i > 0; i--) {
         int min = 0;
         int max = i;
@@ -36,14 +38,46 @@ void fisherYates(int tetrisShapes[]) {
         tetrisShapes[i] = tetrisShapes[x];
         tetrisShapes[x] = temp;
     }
+};
+
+int tetrisOrder;
+void spawn(){
+    //anropas efter vi starta spelet och efter den tidigare block har landats
+    //kolla vilken form, beroende på form kolla i forms och ta den med rotation 0
+    if (tetrisOrder < 6) {
+        blockType = tetrisShapes[tetrisOrder];
+        tetrisOrder++;
+        //om den lika med 0, något lika med form[0][0][k][] och för k går genom alla 4 och plussa på (0,4)på x och y lägga de???
+        if (tetrisOrder == 6 ){
+            fisherYates(tetrisShapes[]);
+            tetrisOrder = 0;
+        }
+    }
+    //efter har spawnat alla ska fisherYates köra igen för en ny listan
 }
 
 
+void boolen canPlace(){
+    //kan placeras om den 
+    if(/*om 0 <= y <= 20, 0 <= x <= 10, eller block har ngt under, alltså (y,x) + (1,0)*/) {
+        return false;
+    }
+    return true;
+}
 
-};
+void moveLeft() {
 
+}
 
-int forms[7][4][4][2]{ //blockType, blockrotation, blocktile, block coordinate
+void moveRight() {
+
+}
+
+void dashDown() {
+
+}
+
+int forms[7][4][4][2]{ //blockType, blockrotation(moturs), blocktile, block coordinate
     { // O
         { {0,0}, {1,0}, {0,1}, {1,1} },
         { {0,0}, {1,0}, {0,1}, {1,1} },
@@ -68,13 +102,13 @@ int forms[7][4][4][2]{ //blockType, blockrotation, blocktile, block coordinate
         { {0,1}, {1,1}, {1,2}, {2,2} },
         { {1,0}, {0,1}, {1,1}, {0,2} }
     },
-    { // L
+    { // J
         { {2,0}, {0,1}, {1,1}, {2,1} },
         { {1,0}, {1,1}, {1,2}, {2,2} },
         { {0,1}, {1,1}, {2,1}, {0,2} },
         { {0,0}, {1,0}, {1,1}, {1,2} }
     }    
-    { // J
+    { // L
         { {0,0}, {0,1}, {1,1}, {2,1} },
         { {1,0}, {2,0}, {1,1}, {1,2} },
         { {0,1}, {1,1}, {2,1}, {2,2} },
