@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 /*
 TODO:
 Blocks //
@@ -21,12 +23,19 @@ int blockRotation;
 
 int canPlace(){
 
-int tetrisShapes[7] = {0,1,2,3,4,5,6} //se nedan för nummer motsvarar
-int bag[7]
+int tetrisShapes[7] = {1,2,3,4,5,6,7}; //se nedan för nummer motsvarar
 
 
-void bagShuffle(int[] tetrominos, int[] bag) {
-	bag.copy() // verkar inte var inbyggd
+void fisherYates(int tetrisShapes[]) {
+    for (int i = 6; i > 0; i--) {
+        int min = 0;
+        int max = i;
+        int x = rand() % (max - min + 1) + min;
+
+        int temp = tetrisShapes[i];
+        tetrisShapes[i] = tetrisShapes[x];
+        tetrisShapes[x] = temp;
+    }
 }
 
 
