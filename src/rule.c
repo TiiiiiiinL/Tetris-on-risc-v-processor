@@ -46,14 +46,13 @@ void fisherYates(int tetrisShapes[]) {
 void spawn(){
     //anropas efter vi starta spelet och efter den tidigare block har landats
     //kolla vilken form, beroende på form kolla i forms och ta den med rotation 0
-    if (tetrisOrder < 6) {
+    if (tetrisOrder < 7) {
         blockType = tetrisShapes[tetrisOrder];
         blockRotation = 0;
         blockX = 4;
         blockY = 0;
         tetrisOrder++;
         //om den lika med 0, något lika med form[0][0][k][] och för k går genom alla 4 och plussa på (0,4)på x och y lägga de???
-        
     }
 
     if (tetrisOrder == 7 ){
