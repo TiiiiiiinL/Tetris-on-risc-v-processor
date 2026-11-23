@@ -19,9 +19,11 @@ int board[20][10];
 //(y,x)
 int blockType; 
 int blockRotation;
+int blockX;
+int blockY;
+int tetrisOrder = 0;
 
 
-int canPlace(){
 
 int tetrisShapes[7] = {1,2,3,4,5,6,7}; //se nedan för nummer motsvarar
 
@@ -40,20 +42,24 @@ void fisherYates(int tetrisShapes[]) {
     }
 };
 
-int tetrisOrder;
+
 void spawn(){
     //anropas efter vi starta spelet och efter den tidigare block har landats
     //kolla vilken form, beroende på form kolla i forms och ta den med rotation 0
     if (tetrisOrder < 6) {
         blockType = tetrisShapes[tetrisOrder];
+        blockRotation = 0;
+        blockX = 4;
+        blockY = 0;
         tetrisOrder++;
         //om den lika med 0, något lika med form[0][0][k][] och för k går genom alla 4 och plussa på (0,4)på x och y lägga de???
-        if (tetrisOrder == 6 ){
-            fisherYates(tetrisShapes[]);
-            tetrisOrder = 0;
-        }
+        
     }
-    //efter har spawnat alla ska fisherYates köra igen för en ny listan
+
+    if (tetrisOrder == 7 ){
+        fisherYates(tetrisShapes);
+        tetrisOrder = 0;
+    }
 }
 
 
@@ -66,7 +72,7 @@ void boolen canPlace(){
 }
 
 void moveLeft() {
-
+    //d där grejen som triggrar igig
 }
 
 void moveRight() {
@@ -75,6 +81,13 @@ void moveRight() {
 
 void dashDown() {
 
+}
+
+void boolen gameOverCheck() {
+    if (/*(0,x) är inte lika med 0*/){
+        return true; //gameOver
+    }
+    return false; //inte game over än
 }
 
 int forms[7][4][4][2]{ //blockType, blockrotation(moturs), blocktile, block coordinate
