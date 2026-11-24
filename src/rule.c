@@ -24,7 +24,6 @@ int blockY;
 int tetrisOrder = 0;
 
 
-
 int tetrisShapes[7] = {1,2,3,4,5,6,7}; //se nedan för nummer motsvarar
 
 
@@ -64,12 +63,17 @@ void spawn(){
 }
 
 
-void boolen canPlace(){
+void bool canPlace(){
+    bool check = true;
     /*om 0 <= y <= 20, 0 <= x <= 10, eller block har ngt under, alltså (y,x) + (1,0)*/
-    if(blockX <= 10 && blockX >= 0 && blockY <= 20 && blockY >= 0 /*hur ska man skriva att det finns inget som är placerad där*/) {
-        return true;
+    //för alla 4 rutor i en block, om alla block valid så true
+    //for i 
+    //for j
+    //forms[blockType-1][blockRotation][i][j]
+    if(blockX > 10 || blockX < 0 || blockY > 20 || blockY < 0 || board[blockY][blockX] != 0) {
+        check = false;
     }
-    return false;
+    return check;
 }
 
 void moveLeft() {
@@ -86,27 +90,30 @@ void dashDown() {
 
 }
 
-void boolen gameOverCheck() {
-    if (/*(0,x) är inte lika med 0*/){
-        return true; //gameOver
+void bool gameOverCheck() {
+    bool gameCheck = true;
+    for (int i = 0; i < 10; i++) {
+        if (board[0][i] != 0){
+            gameCheck = false; //gameOver
+        }
     }
-    return false; //inte game over än
+    return gamecheck;
 }
 
 int forms[7][4][4][2]{ //blockType, blockrotation(moturs), blocktile, block coordinate
-    { // O
+    { // 0, O 
         { {0,0}, {1,0}, {0,1}, {1,1} },
         { {0,0}, {1,0}, {0,1}, {1,1} },
         { {0,0}, {1,0}, {0,1}, {1,1} },
         { {0,0}, {1,0}, {0,1}, {1,1} }
     },
-    { // I
+    { // 1, I
         { {0,1}, {1,1}, {2,1}, {3,1} },
         { {2,0}, {2,1}, {2,2}, {2,3} },
         { {0,2}, {1,2}, {2,2}, {3,2} },
         { {1,0}, {1,1}, {1,2}, {1,3} }
     },
-    { // S
+    { // 2, S
         { {1,0}, {2,0}, {0,1}, {1,1} },
         { {1,0}, {1,1}, {2,1}, {2,2} },
         { {1,1}, {2,1}, {0,2}, {1,2} },
@@ -130,7 +137,7 @@ int forms[7][4][4][2]{ //blockType, blockrotation(moturs), blocktile, block coor
         { {0,1}, {1,1}, {2,1}, {2,2} },
         { {1,0}, {1,1}, {0,2}, {1,2} }
     },
-    { // T
+    { // 7, T
         { {1,0}, {0,1}, {1,1}, {2,1} },
         { {1,0}, {1,1}, {2,1}, {1,2} },
         { {0,1}, {1,1}, {2,1}, {1,2} },
