@@ -66,12 +66,17 @@ void spawn(){
 void bool canPlace(){
     bool check = true;
     /*om 0 <= y <= 20, 0 <= x <= 10, eller block har ngt under, alltså (y,x) + (1,0)*/
+    //en block kan bara läggas om den har något under den
     //för alla 4 rutor i en block, om alla block valid så true
     //for i 
     //for j
     //forms[blockType-1][blockRotation][i][j]
     if(blockX > 10 || blockX < 0 || blockY > 20 || blockY < 0 || board[blockY][blockX] != 0) {
         check = false;
+    }
+    if (board[blockY+1][blockX] != 0){
+        //behöver dock att någon block har ngt under och inte alla
+        //en till bool ksk
     }
     return check;
 }
