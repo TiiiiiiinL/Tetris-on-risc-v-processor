@@ -51,8 +51,10 @@ void spawn(){
         blockRotation = 0;
         blockX = 4;
         blockY = 0;
-        tetrisOrder++;
-        //om den lika med 0, något lika med form[0][0][k][] och för k går genom alla 4 och plussa på (0,4)på x och y lägga de???
+        tetrisOrder++; 
+        //på nåt sätt vill vi koppla det här med forms[][][][]
+        //ksk ba liksom basera på block X och Y och sedan plasera alla andra beroende på det
+        //om den lika med 0, något lika med forms[0][0][k][] och för k går genom alla 4 och plussa på (0,4)på x och y lägga de???
     }
 
     if (tetrisOrder == 7 ){
@@ -71,7 +73,9 @@ void boolen canPlace(){
 }
 
 void moveLeft() {
-    //d där grejen som triggrar igig
+    //när anropas ska hela tetris förflytta sig till en steg till vänster
+    //blockX --;
+    //och sen canPlace?
 }
 
 void moveRight() {
