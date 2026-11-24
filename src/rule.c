@@ -63,11 +63,11 @@ void spawn(){
 
 
 void boolen canPlace(){
-    //kan placeras om den 
-    if(/*om 0 <= y <= 20, 0 <= x <= 10, eller block har ngt under, alltså (y,x) + (1,0)*/) {
-        return false;
+    /*om 0 <= y <= 20, 0 <= x <= 10, eller block har ngt under, alltså (y,x) + (1,0)*/
+    if(blockX <= 10 && blockX >= 0 && blockY <= 20 && blockY >= 0 /*hur ska man skriva att det finns inget som är placerad där*/) {
+        return true;
     }
-    return true;
+    return false;
 }
 
 void moveLeft() {
