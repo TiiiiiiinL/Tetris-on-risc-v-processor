@@ -20,7 +20,7 @@ int main()
     int sprite[4][4] = {{0, 1, 0, 0}, {1, 1, 0, 0}, {0, 1, 0, 0}, {0, 0, 0, 0}};
     clearBuffer();
     drawBorder(0);
-    drawQueue(sprite);
+    drawQueue(sprite, 0);
     for (int i = 0; i < 10; i++)
     {
         for (int j = 5; j < 20; j++)
