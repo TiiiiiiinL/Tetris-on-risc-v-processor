@@ -175,9 +175,16 @@ void clearTileOnGame(int horizontalTile, int verticalTile)
     drawRect(x, y, tileSize, tileSize, 0);
 }
 
-void draw2dArray()
+//fix color
+void draw2dArray(int Array[20][10])
 {
-    return;
+    for (int i = 0; i < 20; i++)
+    {
+        for (int j = 0; j < 10; j++)
+        {
+            drawTileOnGame(i, j, color % 3);
+        }
+    }
 }
 
 void drawSprite(int x0, int y0, int sprite[4][4])
