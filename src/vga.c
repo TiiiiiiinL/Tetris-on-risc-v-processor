@@ -10,14 +10,15 @@ drawSprite(): a routine that draws a sprite to the screen at some location
 #include <stdint.h>
 #include <stdlib.h>
 
+// #include "altera_up_avalon_character_buffer.h"
+//  Documentation talks about this on page 17 but i need the header file somehow
+
 const int screenWidth = 320;
 const int screenHeigth = 240;
 const int bufferHeigth = 480;
 
 volatile char *VGA = (volatile char *)0x08000000;
 volatile int *VGACTRl = (volatile int *)0x04000100;
-
-int color1;
 
 unsigned int y_ofs = 0;
 
@@ -43,7 +44,7 @@ uint8_t colorMapper(int r, int g, int b)
 void putPixel(int x, int y, uint8_t color)
 {
     // Check that x and y are not too big
-    if (x < screenWidth && y < screenHeigth)
+    if (x < screenWidth && y < bufferHeigth)
     {
         VGA[y * screenWidth + x] = color;
     }
@@ -82,21 +83,21 @@ void drawRect(int x0, int y0, int width, int heigth, uint8_t color)
     }
 }
 
-void drawBorder()
+void drawBorder(int y)
 {
-    drawRect(115, 25, 90, 5, 255);
-    drawRect(115, 210, 90, 5, 255);
+    drawRect(115, 25 + y, 90, 5, 255);
+    drawRect(115, 210 + y, 90, 5, 255);
 
-    drawRect(110, 25, 5, 190, 255);
-    drawRect(205, 25, 5, 190, 255);
+    drawRect(110, 25 + y, 5, 190, 255);
+    drawRect(205, 25 + y, 5, 190, 255);
 }
 
-void drawTileOnGame(int horizontalTile, int verticalTile)
+void drawTileOnGame(int horizontalTile, int verticalTile, int tileColor)
 {
     int x = (horizontalTile * 9) + 115;
     int y = (verticalTile * 9) + 30;
-    int tileColor = (horizontalTile + verticalTile) % 3;
 
+    // refactor color code
     switch (tileColor)
     {
     case 0:
@@ -123,14 +124,26 @@ void drawTileOnGame(int horizontalTile, int verticalTile)
         break;
     case 2:
         drawRect(x + 1, y + 1, 8, 8, 255);
-        drawRect(x, y, 9, 1, 2);
-        drawRect(x, y + 8, 8, 1, 2);
-        drawRect(x, y, 1, 9, 2);
-        drawRect(x + 8, y, 1, 9, 2);
+        drawRect(x + 1, y + 1, 7, 1, 2);
+        drawRect(x + 1, y + 7, 7, 1, 2);
+        drawRect(x + 1, y + 1, 1, 7, 2);
+        drawRect(x + 7, y + 1, 1, 7, 2);
+        putPixel(x + 1, y + 1, 255);
+        drawRect(x, y, 9, 1, colorMapper(1, 1, 0));
+        drawRect(x, y + 8, 8, 1, colorMapper(1, 1, 0));
+        drawRect(x, y, 1, 9, colorMapper(1, 1, 0));
+        drawRect(x + 8, y, 1, 9, colorMapper(1, 1, 0));
         break;
     default:
         break;
     }
+}
+
+void clearTileOnGame(int horizontalTile, int verticalTile)
+{
+    int x = (horizontalTile * 9) + 115;
+    int y = (verticalTile * 9) + 30;
+    drawRect(x, y, 9, 9, 0);
 }
 
 void draw2dArray()
@@ -148,15 +161,47 @@ void drawHold()
     return;
 }
 
-void drawSprite()
+void drawSprite(int x0, int y0, int sprite[4][4])
 {
-    return;
+    // this does not check edgecollision yet
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            if (sprite[i][j] > 0)
+            {
+                drawTileOnGame(i + x0, j + y0, 1);
+            }
+        }
+    }
+}
+
+void clearSprite(int x0, int y0, int sprite[4][4])
+{
+    // this does not check edgecollision yet
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            if (sprite[i][j] > 0)
+            {
+                clearTileOnGame(i + x0, j + y0);
+            }
+        }
+    }
 }
 
 // wrtie to the backbuffer control to swap the fram being shown.
 void renderFrame()
 {
-    *(VGACTRl + 1) = (unsigned int)(VGA + y_ofs * 320);
+    *(VGACTRl + 1) = (unsigned int)(VGA + (y_ofs * 240) * 320);
     *(VGACTRl + 0) = 0;
-    y_ofs = (y_ofs + 1) % 240;
+    if (y_ofs == 0)
+    {
+        y_ofs = 1;
+    }
+    else
+    {
+        y_ofs = 0;
+    }
 }

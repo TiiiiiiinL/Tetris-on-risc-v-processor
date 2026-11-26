@@ -7,9 +7,10 @@ int getPixel(int x, int y);
 void scroll(void);
 void clearBuffer(void);
 void drawRect(int x0, int y0, int width, int heigth, int color);
-void drawBorder(void);
-void drawTileOnGame(int horizontalTile, int verticaltile);
-void drawSprite(void);
+void drawBorder(int y);
+void drawTileOnGame(int horizontalTile, int verticaltile, int tileColor);
+void drawSprite(int x0, int y0, int sprite[4][4]);
+void clearSprite(int x0, int y0, int sprite[4][4]);
 void renderFrame(void);
 
 #endif
