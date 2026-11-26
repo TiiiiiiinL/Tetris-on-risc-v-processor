@@ -17,9 +17,23 @@ const int screenWidth = 320;
 const int screenHeigth = 240;
 const int bufferHeigth = 480;
 
+const int tileSize = 8;
+
+const int borderLength = tileSize * 10;
+const int borderHeigth = tileSize * 20;
+const int borderThickness = 2;
+const int horizontalPadding = (screenWidth - borderLength) / 2;
+const int verticalPadding = (screenHeigth - borderHeigth) / 2;
+
+// add variables for background, border, tiles etc. colors
+
+const int colorWhite = 255;
+const int colorDarkGrey = 36;
+
 volatile char *VGA = (volatile char *)0x08000000;
 volatile int *VGACTRl = (volatile int *)0x04000100;
 
+// change name?
 unsigned int y_ofs = 0;
 
 // need a color maker
@@ -83,56 +97,71 @@ void drawRect(int x0, int y0, int width, int heigth, uint8_t color)
     }
 }
 
-void drawBorder(int y)
+void drawBorder(int yOffset)
 {
-    drawRect(115, 25 + y, 90, 5, 255);
-    drawRect(115, 210 + y, 90, 5, 255);
+    // horizontal
+    drawRect(horizontalPadding, verticalPadding - borderThickness + yOffset, borderLength, borderThickness, 255);
+    drawRect(horizontalPadding, verticalPadding + borderHeigth + yOffset, borderLength, borderThickness, 255);
 
-    drawRect(110, 25 + y, 5, 190, 255);
-    drawRect(205, 25 + y, 5, 190, 255);
+    // vertical
+    drawRect(horizontalPadding - borderThickness, verticalPadding - borderThickness + yOffset, borderThickness, borderHeigth + 4, 255);
+    drawRect(horizontalPadding + borderLength, verticalPadding - borderThickness + yOffset, borderThickness, borderHeigth + 4, 255);
 }
 
 void drawTileOnGame(int horizontalTile, int verticalTile, int tileColor)
 {
-    int x = (horizontalTile * 9) + 115;
-    int y = (verticalTile * 9) + 30;
+    int x = (horizontalTile * tileSize) + horizontalPadding;
+    int y = (verticalTile * tileSize) + verticalPadding;
 
     // refactor color code
     switch (tileColor)
     {
     case 0:
-        drawRect(x + 1, y + 1, 8, 8, 63);
+        // inner square
+        drawRect(x + 1, y + 1, tileSize - 2, tileSize - 2, 63);
+        // highlight
         putPixel(x + 1, y + 1, 255);
         putPixel(x + 2, y + 2, 255);
         putPixel(x + 2, y + 3, 255);
         putPixel(x + 3, y + 2, 255);
-        drawRect(x, y, 9, 1, colorMapper(1, 1, 0));
-        drawRect(x, y + 8, 8, 1, colorMapper(1, 1, 0));
-        drawRect(x, y, 1, 9, colorMapper(1, 1, 0));
-        drawRect(x + 8, y, 1, 9, colorMapper(1, 1, 0));
+        // horizontal border
+        drawRect(x, y, tileSize, 1, colorDarkGrey);
+        drawRect(x, y + tileSize - 1, tileSize, 1, colorDarkGrey);
+        // vertical border
+        drawRect(x, y, 1, tileSize, colorDarkGrey);
+        drawRect(x + tileSize - 1, y, 1, tileSize, colorDarkGrey);
         break;
     case 1:
-        drawRect(x + 1, y + 1, 8, 8, 2);
+        // inner square
+        drawRect(x + 1, y + 1, tileSize - 2, tileSize - 2, 2);
+        // highligth
         putPixel(x + 1, y + 1, 255);
         putPixel(x + 2, y + 2, 255);
         putPixel(x + 2, y + 3, 255);
         putPixel(x + 3, y + 2, 255);
-        drawRect(x, y, 9, 1, colorMapper(1, 1, 0));
-        drawRect(x, y + 8, 8, 1, colorMapper(1, 1, 0));
-        drawRect(x, y, 1, 9, colorMapper(1, 1, 0));
-        drawRect(x + 8, y, 1, 9, colorMapper(1, 1, 0));
+        // horizontal border
+        drawRect(x, y, tileSize, 1, colorDarkGrey);
+        drawRect(x, y + tileSize - 1, tileSize, 1, colorDarkGrey);
+        // vertical border
+        drawRect(x, y, 1, tileSize, colorDarkGrey);
+        drawRect(x + tileSize - 1, y, 1, tileSize, colorDarkGrey);
         break;
     case 2:
-        drawRect(x + 1, y + 1, 8, 8, 255);
-        drawRect(x + 1, y + 1, 7, 1, 2);
-        drawRect(x + 1, y + 7, 7, 1, 2);
-        drawRect(x + 1, y + 1, 1, 7, 2);
-        drawRect(x + 7, y + 1, 1, 7, 2);
+        // inner square
+        drawRect(x + 1, y + 1, tileSize - 2, tileSize - 2, 255);
+        // inner edge
+        drawRect(x + 1, y + 1, tileSize - 2, 1, 2);
+        drawRect(x + 1, y + tileSize - 2, tileSize - 2, 1, 2);
+        drawRect(x + 1, y + 1, 1, tileSize - 2, 2);
+        drawRect(x + tileSize - 2, y + 1, 1, tileSize - 2, 2);
+        // horizontal border
+        drawRect(x, y, tileSize, 1, colorDarkGrey);
+        drawRect(x, y + tileSize - 1, tileSize, 1, colorDarkGrey);
+        // vertical border
+        drawRect(x, y, 1, tileSize, colorDarkGrey);
+        drawRect(x + tileSize - 1, y, 1, tileSize, colorDarkGrey);
+        // highligth
         putPixel(x + 1, y + 1, 255);
-        drawRect(x, y, 9, 1, colorMapper(1, 1, 0));
-        drawRect(x, y + 8, 8, 1, colorMapper(1, 1, 0));
-        drawRect(x, y, 1, 9, colorMapper(1, 1, 0));
-        drawRect(x + 8, y, 1, 9, colorMapper(1, 1, 0));
         break;
     default:
         break;
@@ -141,22 +170,12 @@ void drawTileOnGame(int horizontalTile, int verticalTile, int tileColor)
 
 void clearTileOnGame(int horizontalTile, int verticalTile)
 {
-    int x = (horizontalTile * 9) + 115;
-    int y = (verticalTile * 9) + 30;
-    drawRect(x, y, 9, 9, 0);
+    int x = (horizontalTile * tileSize) + horizontalPadding;
+    int y = (verticalTile * tileSize) + verticalPadding;
+    drawRect(x, y, tileSize, tileSize, 0);
 }
 
 void draw2dArray()
-{
-    return;
-}
-
-void drawQueue()
-{
-    return;
-}
-
-void drawHold()
 {
     return;
 }
@@ -189,6 +208,23 @@ void clearSprite(int x0, int y0, int sprite[4][4])
             }
         }
     }
+}
+
+// take in the current bag and show index to show?
+void drawQueue(int sprite[4][4])
+{
+    drawRect(horizontalPadding + borderLength + 8, screenHeigth / 2 - 16, 44, 2, colorWhite);
+    drawRect(horizontalPadding + borderLength + 8, screenHeigth / 2 + 18, 44, 2, colorWhite);
+
+    drawRect(horizontalPadding + borderLength + 8, screenHeigth / 2 - 16, 2, 44, colorWhite);
+    drawRect(horizontalPadding + borderLength + 50, screenHeigth / 2 - 16, 2, 44, colorWhite);
+
+    drawSprite(11, 7, sprite);
+}
+
+void drawHold()
+{
+    return;
 }
 
 // wrtie to the backbuffer control to swap the fram being shown.

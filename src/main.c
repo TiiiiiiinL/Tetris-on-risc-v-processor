@@ -12,7 +12,7 @@ void handle_interrupt(unsigned _irq)
 
 int main()
 {
-
+    int tileFrameOffset = 30;
     int currentSpriteX = 0;
     int currentSpriteLastX = -1;
     int currentSpriteY = 0;
@@ -20,6 +20,7 @@ int main()
     int sprite[4][4] = {{0, 1, 0, 0}, {1, 1, 0, 0}, {0, 1, 0, 0}, {0, 0, 0, 0}};
     clearBuffer();
     drawBorder(0);
+    drawQueue(sprite);
     for (int i = 0; i < 10; i++)
     {
         for (int j = 5; j < 20; j++)
@@ -27,13 +28,15 @@ int main()
             drawTileOnGame(i, j, i % 3);
         }
     }
+
     for (int i = 0; i < 10; i++)
     {
         for (int j = 5; j < 20; j++)
         {
-            drawTileOnGame(i + 27, j + 27, i % 3);
+            drawTileOnGame(i, j + tileFrameOffset, i % 3);
         }
     }
+
     while (1)
     {
         if (currentFrame == 0)
@@ -50,13 +53,13 @@ int main()
                 asm volatile("nop");
             }
         }
-        else
+        // else
         {
 
-            clearSprite(currentSpriteLastX, currentSpriteY + 27, sprite);
+            clearSprite(currentSpriteLastX, currentSpriteY + tileFrameOffset, sprite);
             currentSpriteX = currentSpriteX + 1;
             currentSpriteLastX = currentSpriteLastX + 1;
-            drawSprite(currentSpriteX, currentSpriteY + 27, sprite);
+            drawSprite(currentSpriteX, currentSpriteY + tileFrameOffset, sprite);
             drawBorder(240);
             renderFrame();
             currentFrame--;
