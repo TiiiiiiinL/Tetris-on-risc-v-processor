@@ -46,6 +46,7 @@ int main()
             currentSpriteLastX = currentSpriteLastX + 1;
             drawSprite(currentSpriteX, currentSpriteY, sprite);
             drawBorder(0);
+            drawQueue(sprite, 0);
             renderFrame();
             currentFrame++;
             for (int i = 0; i < 10000000; i++)
@@ -61,6 +62,7 @@ int main()
             currentSpriteLastX = currentSpriteLastX + 1;
             drawSprite(currentSpriteX, currentSpriteY + tileFrameOffset, sprite);
             drawBorder(240);
+            drawQueue(sprite, 1);
             renderFrame();
             currentFrame--;
             for (int i = 0; i < 10000000; i++)

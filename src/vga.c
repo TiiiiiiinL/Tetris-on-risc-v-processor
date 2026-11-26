@@ -211,15 +211,15 @@ void clearSprite(int x0, int y0, int sprite[4][4])
 }
 
 // take in the current bag and show index to show?
-void drawQueue(int sprite[4][4])
+void drawQueue(int sprite[4][4], int yOffset)
 {
-    drawRect(horizontalPadding + borderLength + 8, screenHeigth / 2 - 16, 44, 2, colorWhite);
-    drawRect(horizontalPadding + borderLength + 8, screenHeigth / 2 + 18, 44, 2, colorWhite);
+    drawRect(horizontalPadding + borderLength + 10, screenHeigth / 2 - 20, 44, 2, colorWhite);
+    drawRect(horizontalPadding + borderLength + 10, screenHeigth / 2 + 22, 44, 2, colorWhite);
 
-    drawRect(horizontalPadding + borderLength + 8, screenHeigth / 2 - 16, 2, 44, colorWhite);
-    drawRect(horizontalPadding + borderLength + 50, screenHeigth / 2 - 16, 2, 44, colorWhite);
+    drawRect(horizontalPadding + borderLength + 10, screenHeigth / 2 - 20, 2, 44, colorWhite);
+    drawRect(horizontalPadding + borderLength + 52, screenHeigth / 2 - 20, 2, 44, colorWhite);
 
-    drawSprite(11, 7, sprite);
+    drawSprite(12, 8, sprite);
 }
 
 void drawHold()
