@@ -4,11 +4,18 @@ void handle_interrupt(unsigned _irq)
 {
 }
 
+// TODO
+// fix y offset for frame 1 and 2
+// add edge collision
+// add draw 2darray (placed blocks)
+// add row clear animation
+
 int main()
 {
-    int x = 0;
-    int lastX = -1;
-    int y = 0;
+
+    int currentSpriteX = 0;
+    int currentSpriteLastX = -1;
+    int currentSpriteY = 0;
     int currentFrame = 0;
     int sprite[4][4] = {{0, 1, 0, 0}, {1, 1, 0, 0}, {0, 1, 0, 0}, {0, 0, 0, 0}};
     clearBuffer();
@@ -20,14 +27,21 @@ int main()
             drawTileOnGame(i, j, i % 3);
         }
     }
+    for (int i = 0; i < 10; i++)
+    {
+        for (int j = 5; j < 20; j++)
+        {
+            drawTileOnGame(i + 27, j + 27, i % 3);
+        }
+    }
     while (1)
     {
         if (currentFrame == 0)
         {
-            clearSprite(lastX, y, sprite);
-            x = x + 1;
-            lastX = lastX + 1;
-            drawSprite(x, y, sprite);
+            clearSprite(currentSpriteLastX, currentSpriteY, sprite);
+            currentSpriteX = currentSpriteX + 1;
+            currentSpriteLastX = currentSpriteLastX + 1;
+            drawSprite(currentSpriteX, currentSpriteY, sprite);
             drawBorder(0);
             renderFrame();
             currentFrame++;
@@ -39,10 +53,10 @@ int main()
         else
         {
 
-            clearSprite(lastX, y + 27, sprite);
-            x = x + 1;
-            lastX = lastX + 1;
-            drawSprite(x, y + 27, sprite);
+            clearSprite(currentSpriteLastX, currentSpriteY + 27, sprite);
+            currentSpriteX = currentSpriteX + 1;
+            currentSpriteLastX = currentSpriteLastX + 1;
+            drawSprite(currentSpriteX, currentSpriteY + 27, sprite);
             drawBorder(240);
             renderFrame();
             currentFrame--;
