@@ -94,6 +94,16 @@ void moveRight() {
 
 }
 
+void rotation() {
+    if (blockRotation = 3) {
+        blockRotation = 0;
+    }
+    else {
+        blockRotation++;
+
+    }
+}
+
 void dashDown() {
 
 }

@@ -7,6 +7,8 @@ void bool canPlace();
 void moveLeft();
 void moveRight();
 void dashDown();
+void rotation();
 void bool gameOverCheck();
+
 
 #endif 
