@@ -95,25 +95,28 @@ void land() {
 }
 
 void moveLeft() {
-    //när anropas ska hela tetris förflytta sig till en steg till vänster
-    //blockX --;
-    if (blockX > 0) {
+    if (canPlace(blockType, blockRotation, blockX-1, blockY)) {
         blockX--;
     }
 }
 
 void moveRight() {
-    if (blockX < 9) {
+    if (canPlace(blockType, blockRotation, blockX+1, blockY)) {
         blockX++;
     }
 }
 
 void rotation() {
-    if (blockRotation == 3) {
-        blockRotation = 0;
+    int rot = blockRotation;
+    if (rot == 3) {
+        rot = 0;
     }
     else {
-        blockRotation++;
+        rot++;
+    }
+
+    if(canPlace(blockType, rot, blockX, blockY)) {
+        blockRotation = rot;
     }
 }
 
@@ -121,6 +124,7 @@ void hardDrop() {
     //för alla 4 blockpart
     //hmmmmmmmmmm
     while (board[blockY+1][blockX]==0) {
+        //och canPlace
         blockY++;
     }
 }
