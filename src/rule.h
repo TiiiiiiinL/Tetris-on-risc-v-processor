@@ -6,7 +6,7 @@ void spawn();
 void bool canPlace();
 void moveLeft();
 void moveRight();
-void dashDown();
+void hardDeop();
 void rotation();
 void bool gameOverCheck();
 

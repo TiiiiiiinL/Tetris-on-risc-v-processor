@@ -63,50 +63,77 @@ void spawn(){
 }
 
 
-void bool canPlace(){
+void bool canPlace(int type, int rot, int px, int py){ 
+    // ta in vilka värde för att kolla canPlace innan vi kör in riktiga värde
     bool check = true;
-    /*om 0 <= y <= 20, 0 <= x <= 10, eller block har ngt under, alltså (y,x) + (1,0)*/
-    //en block kan bara läggas om den har något under den
-    //för alla 4 rutor i en block, om alla block valid så true
+
+    for (int i = 0; i < 4; i++){
+        int x = forms[type-1][rot][i][0] + px;
+        int y = forms[type-1][rot][i][1] + py;
+
+        if(x > 9 || x < 0 || y > 19 || y < 0 || board[y][x] != 0) {
+            check = false; //om ngn av de e false så e det false
+            return check;
+        }
+    } 
+    return check;
+}
+
+void land() {
+    bool canLand = false;
+
     for (int i = 0, i < 4; i++){
         blockY = forms[blockType-1][blockRotation][i][0];
         blockX = forms[blockType-1][blockRotation][i][1];
-
-        if(blockX > 10 || blockX < 0 || blockY > 20 || blockY < 0 || board[blockY][blockX] != 0) {
-            check = false; //om ngn av de e false så e det false
+        
+        if (board[blockY+1][blockX] != 0){ //den kan inte placeras i luften
+            canLand = true;
         }
     } 
-   
-    if (board[blockY+1][blockX] != 0){
-        //behöver dock att någon block har ngt under och inte alla
-        //en till bool ksk
-    }
-    return check;
+
+    return canLand;
 }
 
 void moveLeft() {
     //när anropas ska hela tetris förflytta sig till en steg till vänster
     //blockX --;
-    //och sen canPlace?
+    if (blockX > 0) {
+        blockX--;
+    }
 }
 
 void moveRight() {
-
+    if (blockX < 9) {
+        blockX++;
+    }
 }
 
 void rotation() {
-    if (blockRotation = 3) {
+    if (blockRotation == 3) {
         blockRotation = 0;
     }
     else {
         blockRotation++;
-
     }
 }
 
-void dashDown() {
+void hardDrop() {
+    //för alla 4 blockpart
+    //hmmmmmmmmmm
+    while (board[blockY+1][blockX]==0) {
+        blockY++;
+    }
+}
+
+void lock() {
 
 }
+
+void clearLines() {
+    //vi bechöver bara checka största Y värde blockY uppåt till mindre.
+
+}
+
 
 void bool gameOverCheck() {
     bool gameCheck = true;
