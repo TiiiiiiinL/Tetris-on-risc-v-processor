@@ -22,6 +22,7 @@ int blockRotation;
 int blockX;
 int blockY;
 int tetrisOrder = 0;
+int point = 0;
 
 
 int tetrisShapes[7] = {1,2,3,4,5,6,7}; //se nedan för nummer motsvarar
@@ -141,7 +142,6 @@ void hardDrop() {
     }
     else {
         lock();
-        break;
     }
 }
 
@@ -165,12 +165,9 @@ void clearLine(int y) { //inputta lägsta randen som ha landat typ
             board[i] = board[i-1];
         }
         board[0] = [0,0,0,0,0,0,0,0,0,0];
+        point = point + 100;
+        clearLine(y);
     }
-    else{
-        break;
-    }
-
-    clearLine(y);
 }
 
 
@@ -179,6 +176,7 @@ void bool gameOverCheck() {
     for (int i = 0; i < 10; i++) {
         if (board[0][i] != 0){
             gameCheck = false; //gameOver
+            point = 0;
         }
     }
     return gamecheck;
