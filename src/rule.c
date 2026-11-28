@@ -79,7 +79,7 @@ void bool canPlace(int type, int rot, int px, int py){
     return check;
 }
 
-void land() {
+void land() { //ksk samma sak som lock ??
     bool canLand = false;
 
     for (int i = 0, i < 4; i++){
@@ -133,9 +133,31 @@ void lock() {
 
 }
 
-void clearLines() {
+void clearLine(int y) { //inputta lägsta randen som ha landat typ
     //vi bechöver bara checka största Y värde blockY uppåt till mindre.
+    //om en rad full ( inte finns board[a][b] =0)
+    //då... flytta hela board[y-1][] till y. 
+    //gör så med alla rader och sätt rad[0][x] till alla nollor
 
+    //kallas varje gång efter placerat en ruta
+    bool fullLine = true;
+    for(int x = 0; x < 10; x++) {
+        if(board[y][x] == 0) { //om det nån gång finns en värde som är 0, då inte full
+            fullLine = false;
+        }
+    }
+
+    if(fullLine) {
+        for (int i = y; i > 0; i--) {
+            board[i] = board[i-1];
+        }
+        board[0] = [0,0,0,0,0,0,0,0,0,0];
+    }
+    else{
+        break;
+    }
+
+    clearLine(y);
 }
 
 
