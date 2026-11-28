@@ -79,19 +79,30 @@ void bool canPlace(int type, int rot, int px, int py){
     return check;
 }
 
-void land() { //ksk samma sak som lock ??
-    bool canLand = false;
+void lock() { 
+    //det här ska kopplas med canPlace på nåt sätt
+    //en block ska lock om block inte kan flyttas ner mer
+    if(!canPlace(blockType, blockRotation, blockX, blockY+1)) {
+        bool canLand = false;
 
-    for (int i = 0, i < 4; i++){
-        blockY = forms[blockType-1][blockRotation][i][0];
-        blockX = forms[blockType-1][blockRotation][i][1];
-        
-        if (board[blockY+1][blockX] != 0){ //den kan inte placeras i luften
-            canLand = true;
-        }
-    } 
+        for (int i = 0; i < 4; i++){
+            int y = forms[blockType-1][blockRotation][i][1] + blockY;
+            int x = forms[blockType-1][blockRotation][i][0] + blockX;
+            
+            if (board[y+1][x] != 0){ //den kan inte placeras i luften
+                canLand = true;
+            }
+        } 
 
-    return canLand;
+        for (int i = 0; i < 4; i++){
+            int y = forms[blockType-1][blockRotation][i][1] + blockY;
+            int x = forms[blockType-1][blockRotation][i][0] + blockX;
+            
+            if (canLand){ //den kan inte placeras i luften
+                board[y][x] = 1;    //behöver vi olika siffror? fråga jonas
+            }
+        } 
+    }
 }
 
 void moveLeft() {
@@ -122,16 +133,18 @@ void rotation() {
 
 void hardDrop() {
     //för alla 4 blockpart
+    //om y+1 canPlace så flytta ner en steg tills den inte canPlace och placera på den förra
     //hmmmmmmmmmm
-    while (board[blockY+1][blockX]==0) {
-        //och canPlace
+    if (canPlace(blockType, blockRotation, blockX, blockY+1)) {
         blockY++;
+        hardDrop();
+    }
+    else {
+        lock();
+        break;
     }
 }
 
-void lock() {
-
-}
 
 void clearLine(int y) { //inputta lägsta randen som ha landat typ
     //vi bechöver bara checka största Y värde blockY uppåt till mindre.
